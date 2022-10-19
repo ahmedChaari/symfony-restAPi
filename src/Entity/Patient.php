@@ -217,5 +217,57 @@ class Patient
      */
     private $qualite;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Nationalite::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $nationalite;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Domain::class)
+     */
+    private $domain;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Assureur::class)
+     */
+    private $Assureur;
+
+    public function getNationalite(): ?Nationalite
+    {
+        return $this->nationalite;
+    }
+
+    public function setNationalite(?Nationalite $nationalite): self
+    {
+        $this->nationalite = $nationalite;
+
+        return $this;
+    }
+
+    public function getDomain(): ?Domain
+    {
+        return $this->domain;
+    }
+
+    public function setDomain(?Domain $domain): self
+    {
+        $this->domain = $domain;
+
+        return $this;
+    }
+
+    public function getAssureur(): ?Assureur
+    {
+        return $this->Assureur;
+    }
+
+    public function setAssureur(?Assureur $Assureur): self
+    {
+        $this->Assureur = $Assureur;
+
+        return $this;
+    }
+
 
 }
