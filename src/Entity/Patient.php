@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Patient
- *
+ * @ApiResource()
  * @ORM\Table(name="patient")
  * @ORM\Entity
  */
@@ -233,6 +236,30 @@ class Patient
      */
     private $Assureur;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rdv::class, mappedBy="patient", orphanRemoval=true)
+     */
+    private $rdvs;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Consultation::class, mappedBy="patient", orphanRemoval=true)
+     */
+    private $consultations;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Reglement::class, mappedBy="patient")
+     */
+    private $reglements;
+
+
+    public function __construct()
+    {
+        $this->rdvs = new ArrayCollection();
+        $this->consultations = new ArrayCollection();
+        $this->reglements = new ArrayCollection();
+       
+    }
+
     public function getNationalite(): ?Nationalite
     {
         return $this->nationalite;
@@ -268,6 +295,98 @@ class Patient
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvs(): Collection
+    {
+        return $this->rdvs;
+    }
+
+    public function addRdv(Rdv $rdv): self
+    {
+        if (!$this->rdvs->contains($rdv)) {
+            $this->rdvs[] = $rdv;
+            $rdv->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdv(Rdv $rdv): self
+    {
+        if ($this->rdvs->removeElement($rdv)) {
+            // set the owning side to null (unless already changed)
+            if ($rdv->getPatient() === $this) {
+                $rdv->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Consultation>
+     */
+    public function getConsultations(): Collection
+    {
+        return $this->consultations;
+    }
+
+    public function addConsultation(Consultation $consultation): self
+    {
+        if (!$this->consultations->contains($consultation)) {
+            $this->consultations[] = $consultation;
+            $consultation->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsultation(Consultation $consultation): self
+    {
+        if ($this->consultations->removeElement($consultation)) {
+            // set the owning side to null (unless already changed)
+            if ($consultation->getPatient() === $this) {
+                $consultation->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reglement>
+     */
+    public function getReglements(): Collection
+    {
+        return $this->reglements;
+    }
+
+    public function addReglement(Reglement $reglement): self
+    {
+        if (!$this->reglements->contains($reglement)) {
+            $this->reglements[] = $reglement;
+            $reglement->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReglement(Reglement $reglement): self
+    {
+        if ($this->reglements->removeElement($reglement)) {
+            // set the owning side to null (unless already changed)
+            if ($reglement->getPatient() === $this) {
+                $reglement->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+   
 
 
 }
